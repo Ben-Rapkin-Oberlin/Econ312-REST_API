@@ -14,20 +14,43 @@ countries = [
 
 @app.get("/")
 def get_countries():
+    print("get")
     return jsonify(countries)
 
+
+@app.post("/") #add
+#@app.route('/', methods=["POST"])
+def post_country():
+    #print('1')
+    if request.is_json:
+        a=request.get_json()
+       # print("here")
+        countries.append(a)
+        return a, 201
+    return {"error": "Request must be JSON"}, 415
+
+@app.put("/") #update
+def put_country():
+    if request.is_json:
+        a=request.get_json()
+        #print(a)
+        countries[a["id"]-1]=a
+        return a, 201
+    return {"error": "Request must be JSON"}, 415
 
 @app.delete("/")
 def delete_country():
     if request.is_json:
         a=request.get_json()
-        print(a)
-        print(a["id"])
+        #print(a)
+        #print(a["id"])
         #print(len(countries))
         countries.pop(a["id"]-1)
 
         return a, 201
     return {"error": "Request must be JSON"}, 415
+
+
 
 @app.route('/')
 def home():
